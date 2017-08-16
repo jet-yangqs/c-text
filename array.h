@@ -1,6 +1,6 @@
 #ifndef ARRAY_H_
 #define ARRAY_H_
-#include<cassert>
+//#include<cassert>
 
 template <class T>
 class Array{
@@ -12,9 +12,9 @@ public:
 	Array(const Array<T>&a);
 	~Array();
 	Array<T>& operator=(const Array<T>&rhs);//重载“=”，使数组对象可以整体赋值
-	T& operator[](int i);  //重载[]，使得Array对象可以起到普通数组的作用
-	const T& operator[](int i) const;//[]针对const的重载
-	operator T*();//重载到T*类型的转换，是array对象可以起到c++普通数组的作用
+	T& operator[](int i);                   //重载[]，使得Array对象可以起到普通数组的作用
+	const T& operator[](int i) const;       //[]针对const的重载
+	operator T*();                          //重载到T*类型的转换，是array对象可以起到c++普通数组的作用
 	operator const T*() const;//到T*类型的转换针对const的重载，使array对象可以起到c++普通数组的作用
     int getsize() const;
     void resize(int sz);
@@ -23,9 +23,11 @@ public:
 
 template<class T>
 Array<T>::Array(int sz){
-	assert(sz>=0);
+	if(sz>=0)
+		cout<<"size must greater than 0";
+	else{
 	size=sz;
-	list=new T[size];
+	list=new T[size];}
 }
 
 template<class T>
@@ -54,13 +56,15 @@ Array<T>&Array<T>::operator=(const Array<T>&rhs){
 }
 
 template<class T>
-T&Array<T>::operator[](int n){   //重载后返回类型为T的引用
-	assert(n>=0 && n<size);
+T &Array<T>::operator[](int n){   //重载后返回类型为T的引用
+	if(n>=0 && n<size)
+		cout<<"valid int";
+	else
 	return list[n];
 }
 
 template<class T>
-const T&Array<T>::operator[](int n)const{   //重载后返回类型为T的引用
+const T &Array<T>::operator[](int n) const{   //重载后返回类型为T的引用
 	assert(n>=0 && n<size);
 	return list[n];
 }
@@ -85,7 +89,7 @@ void Array<T>::resize(int sz){
 	assert(sz>=0);
 	if(size==sz)
 		return;
-	T* newlist=new T[sz];
+	T * newlist=new T[sz];
 	int n=(sz<size)?sz:size; 
     for(int i=0;i<n;i++)
     	newlist[i]=list[i];
@@ -93,6 +97,7 @@ void Array<T>::resize(int sz){
     list=newlist;
     size=sz;
 }
+
 template<class T>
 void Array<T>::swap(int i,int j){
 	if(i<0||j<0||i>=size||j>=size)
